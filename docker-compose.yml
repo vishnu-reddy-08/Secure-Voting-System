@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - FRONTEND_URL=http://localhost:5173
+      - JWT_SECRET=supersecret-academic-biometric-voting-key-2026-secure
+      - JWT_EXPIRE_MINUTES=120
+      - FIREBASE_PROJECT_ID=smart-biometric-voting
+    volumes:
+      - ./backend/firestore_local.json:/app/firestore_local.json
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
